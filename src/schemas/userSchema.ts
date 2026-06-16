@@ -11,7 +11,7 @@ export const userIdParamSchema = z.object({
 export const createUserSchema = z.object({
   body: z.object({
     email: z.email('Invalid email address format'),
-    name: z.string().min(2, 'Name must be at least 2 characters long').optional(),
+    name: z.string().min(2, 'Name must be at least 2 characters long'),
   }),
 });
 

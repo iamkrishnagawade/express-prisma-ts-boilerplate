@@ -18,15 +18,11 @@ export const getUsers = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const getUserById = catchAsync(async (req: Request, res: Response) => {
-  const id = req.params.id;
-
-  if (typeof id !== "string") {
-    throw new AppError("ID must be a string", 400);
-  }
+  const userId = String(req.params.id);
 
   const user = await prisma.user.findUnique({
     where: {
-      id,
+      id: userId,
     },
   });
   if (!user) {
