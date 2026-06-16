@@ -3,6 +3,7 @@ import { AppError } from "../utils/appError.js";
 import { ZodError } from "zod";
 import { Prisma } from "../generated/prisma/client.js";
 import { env } from "../config/env.js";
+import logger from "../lib/logger.js";
 
 // Handles Prisma Errors
 const handlePrismaError = (
@@ -75,6 +76,7 @@ export const globalErrorHandler: ErrorRequestHandler = (
         message: error.message,
       });
     } else {
+      logger.error(`Uncaught Error: ${error.stack}`);
       // Programming or other unknown errors
       res.status(500).json({
         status: "error",

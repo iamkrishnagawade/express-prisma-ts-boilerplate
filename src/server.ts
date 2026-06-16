@@ -1,8 +1,10 @@
 import "dotenv/config.js";
 import app from "./app.js";
+import logger from "./lib/logger.js";
+import { env } from "./config/env.js";
 
-const PORT = process.env.PORT || 3000;
+const PORT = env.PORT;
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  logger.info(`Server is running on http://localhost:${PORT} [ENV: ${env.NODE_ENV}]`)
 });

@@ -1,3 +1,5 @@
+import logger from "../lib/logger";
+
 export class AppError extends Error {
   public readonly statusCode: number;
   public readonly status: string;
@@ -10,6 +12,12 @@ export class AppError extends Error {
     this.isOperational = true; // Flags this as a expected app error
 
     Error.captureStackTrace(this, this.constructor);
+    this.logError();
+  }
+
+  logError() {
+    logger.error(`AppError: ${this.message}`);
+    logger.error(`Stack: ${this.stack}`);
   }
 }
 
