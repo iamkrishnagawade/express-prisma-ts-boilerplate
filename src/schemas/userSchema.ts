@@ -20,10 +20,12 @@ export const updateUserSchema = z.object({
   params: z.object({
     id: z.string().regex(/^\d+$/, 'ID must be a valid numeric string'),
   }),
-  body: z.object({
-    email: z.email('Invalid email address format').optional(),
-    name: z.string().min(2, 'Name must be at least 2 characters long').optional(),
-  }).refine(data => data.email !== undefined || data.name !== undefined, {
-    message: 'You must provide at least one field to update (email or name)',
-  }),
+  body: z
+    .object({
+      email: z.email('Invalid email address format').optional(),
+      name: z.string().min(2, 'Name must be at least 2 characters long').optional(),
+    })
+    .refine((data) => data.email !== undefined || data.name !== undefined, {
+      message: 'You must provide at least one field to update (email or name)',
+    }),
 });

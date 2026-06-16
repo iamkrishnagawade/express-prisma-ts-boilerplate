@@ -1,4 +1,4 @@
-import { Response } from "express";
+import { Response } from 'express';
 
 interface ApiResponseOptions<T> {
   res: Response;
@@ -14,14 +14,14 @@ export class ApiResponse {
   static send<T>({
     res,
     statusCode = 200,
-    message = "Operation successful",
+    message = 'Operation successful',
     data,
   }: ApiResponseOptions<T>): void {
     // Auto-calculate results count if data is an array
     const resultsCount = Array.isArray(data) ? data.length : undefined;
 
     res.status(statusCode).json({
-      status: "success",
+      status: 'success',
       message,
       ...(resultsCount !== undefined && { results: resultsCount }),
       ...(data !== undefined && { data }),
@@ -54,18 +54,18 @@ export class ApiResponse {
   }
 
   static notFound(res: Response): void {
-    this.send({ res, statusCode: 404, message: "Not Found" });
+    this.send({ res, statusCode: 404, message: 'Not Found' });
   }
 
   static unauthorized(res: Response): void {
-    this.send({ res, statusCode: 401, message: "Unauthorized" });
+    this.send({ res, statusCode: 401, message: 'Unauthorized' });
   }
 
   static forbidden(res: Response): void {
-    this.send({ res, statusCode: 403, message: "Forbidden" });
+    this.send({ res, statusCode: 403, message: 'Forbidden' });
   }
 
   static serverError(res: Response): void {
-    this.send({ res, statusCode: 500, message: "Internal Server Error" });
+    this.send({ res, statusCode: 500, message: 'Internal Server Error' });
   }
 }

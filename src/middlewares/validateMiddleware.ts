@@ -18,7 +18,7 @@ export const validate = (schema: z.ZodObject) => {
 
       next();
     } catch (error) {
-      next(error); 
+      next(error);
     }
   };
 };

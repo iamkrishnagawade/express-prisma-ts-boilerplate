@@ -1,8 +1,8 @@
-import express, { Application, NextFunction, Request, Response } from "express";
-import cors from "cors";
-import { globalErrorHandler } from "./middlewares/errorMiddleware.js";
-import AppError from "./utils/appError.js";
-import userRoutes from "./routes/userRoutes.js";
+import express, { Application, NextFunction, Request, Response } from 'express';
+import cors from 'cors';
+import { globalErrorHandler } from './middlewares/errorMiddleware.js';
+import AppError from './utils/appError.js';
+import userRoutes from './routes/userRoutes.js';
 
 const app: Application = express();
 
@@ -12,16 +12,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Basic Route for testing
-app.get("/health", (req: Request, res: Response) => {
+app.get('/health', (req: Request, res: Response) => {
   res.status(200).json({
-    status: "success",
-    message: "Server is running",
+    status: 'success',
+    message: 'Server is running',
     timestamp: new Date().toISOString(),
   });
 });
 
 // routes
-app.use("/api/v1/users", userRoutes);
+app.use('/api/v1/users', userRoutes);
 
 // Handle undefined routes
 app.all(/(.*)/, (req: Request, res: Response, next: NextFunction) => {

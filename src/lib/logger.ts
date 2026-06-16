@@ -12,21 +12,21 @@ const logger = winston.createLogger({
   format: combine(
     timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
     winston.format.errors({ stack: true }), // Automatically capture stack traces
-    json()
+    json(),
   ),
   transports: [
     // 1. Write all logs with level 'error' and important exceptions to error.log
-    new winston.transports.File({ 
-      filename: 'logs/error.log', 
+    new winston.transports.File({
+      filename: 'logs/error.log',
       level: 'error',
       maxsize: 5242880, // 5MB limit per file
-      maxFiles: 5
+      maxFiles: 5,
     }),
     // 2. Write all logs with level 'info' and below to combined.log
-    new winston.transports.File({ 
+    new winston.transports.File({
       filename: 'logs/combined.log',
       maxsize: 5242880,
-      maxFiles: 5
+      maxFiles: 5,
     }),
   ],
 });
@@ -35,11 +35,8 @@ const logger = winston.createLogger({
 if (process.env.NODE_ENV !== 'production') {
   logger.add(
     new winston.transports.Console({
-      format: combine(
-        colorize(),
-        consoleLogFormat
-      ),
-    })
+      format: combine(colorize(), consoleLogFormat),
+    }),
   );
 }
 
