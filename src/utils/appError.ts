@@ -1,4 +1,4 @@
-import logger from '../lib/logger';
+import logger from '../lib/logger.js';
 
 export class AppError extends Error {
   public readonly statusCode: number;

@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import logger from '../lib/logger';
+import logger from '../lib/logger.js';
 
 interface ApiResponseOptions<T> {
   res: Response;
