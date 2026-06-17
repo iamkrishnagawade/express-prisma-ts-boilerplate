@@ -1,4 +1,17 @@
 import { z } from 'zod';
+import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
+import { registry } from '../docs/openapiRegistry.js';
+
+extendZodWithOpenApi(z);
+
+export const UserSchema = registry.register(
+  'User',
+  z.object({
+    id: z.uuid().openapi({ example: 'ed10dddf-bf33-4554-b6ef-07cb8c8e321c' }),
+    email: z.email().openapi({ example: 'bob@example.com' }),
+    name: z.string().min(2).optional().openapi({ example: 'Bob' }),
+  }),
+);
 
 // Schema for matching standard numeric database IDs in URL params
 export const userIdParamSchema = z.object({
