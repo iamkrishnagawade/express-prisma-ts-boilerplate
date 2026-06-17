@@ -18,16 +18,55 @@ export const getUsers = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const getUserById = catchAsync(async (req: Request, res: Response) => {
-  const userId = String(req.params.id);
+  const { id } = req.params;
+
+  if (typeof id !== 'string') {
+    return new AppError(`Invalid userId param type! Expected UUID but got ${typeof id}`, 400);
+  }
 
   const user = await prisma.user.findUnique({
     where: {
-      id: userId,
+      id,
     },
+  });
+  if (!user) {
+    ApiResponse.notFound(res, 'User not found');
+    return;
+  }
+  ApiResponse.success(res, user, 'User fetched successfully');
+});
+
+export const updateUser = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  if (typeof id !== 'string') {
+    return new AppError(`Invalid userId param type! Expected UUID but got ${typeof id}`, 400);
+  }
+  const user = await prisma.user.update({
+    where: {
+      id,
+    },
+    data: req.body,
   });
   if (!user) {
     ApiResponse.notFound(res);
     return;
   }
-  ApiResponse.success(res, user, 'User fetched successfully');
+  ApiResponse.success(res, user, 'User updated successfully');
+});
+
+export const deleteUser = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  if (typeof id !== 'string') {
+    return new AppError(`Invalid userId param type! Expected UUID but got ${typeof id}`, 400);
+  }
+  const user = await prisma.user.delete({
+    where: {
+      id,
+    },
+  });
+  if (!user) {
+    ApiResponse.notFound(res, 'User not found');
+    return;
+  }
+  ApiResponse.success(res, user, 'User deleted successfully');
 });

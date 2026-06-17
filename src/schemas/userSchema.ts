@@ -3,7 +3,7 @@ import { z } from 'zod';
 // Schema for matching standard numeric database IDs in URL params
 export const userIdParamSchema = z.object({
   params: z.object({
-    id: z.string().regex(/^\d+$/, 'ID must be a valid numeric string'),
+    id: z.uuid(),
   }),
 });
 

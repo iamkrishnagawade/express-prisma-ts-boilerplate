@@ -1,4 +1,5 @@
 import { Response } from 'express';
+import logger from '../lib/logger';
 
 interface ApiResponseOptions<T> {
   res: Response;
@@ -26,6 +27,14 @@ export class ApiResponse {
       ...(resultsCount !== undefined && { results: resultsCount }),
       ...(data !== undefined && { data }),
     });
+
+    logger.info('API Response', {
+      requestId: res.locals.requestId,
+      statusCode,
+      message,
+      results: resultsCount,
+      data,
+    });
   }
 
   // Common shortcut methods for cleaner controller syntax
@@ -41,31 +50,23 @@ export class ApiResponse {
     this.send({ res, statusCode: 201, message, data });
   }
 
-  static noContent(res: Response): void {
-    res.status(204).send();
+  static noContent(res: Response, message?: string): void {
+    this.send({ res, statusCode: 204, message: message || 'No Content' });
   }
 
-  static delete<T>(res: Response, data?: T, message?: string): void {
-    this.send({ res, statusCode: 200, message, data });
+  static notFound(res: Response, message?: string): void {
+    this.send({ res, statusCode: 404, message: message || 'Not Found' });
   }
 
-  static update<T>(res: Response, data?: T, message?: string): void {
-    this.send({ res, statusCode: 200, message, data });
+  static unauthorized(res: Response, message?: string): void {
+    this.send({ res, statusCode: 401, message: message || 'Unauthorized' });
   }
 
-  static notFound(res: Response): void {
-    this.send({ res, statusCode: 404, message: 'Not Found' });
+  static forbidden(res: Response, message?: string): void {
+    this.send({ res, statusCode: 403, message: message || 'Forbidden' });
   }
 
-  static unauthorized(res: Response): void {
-    this.send({ res, statusCode: 401, message: 'Unauthorized' });
-  }
-
-  static forbidden(res: Response): void {
-    this.send({ res, statusCode: 403, message: 'Forbidden' });
-  }
-
-  static serverError(res: Response): void {
-    this.send({ res, statusCode: 500, message: 'Internal Server Error' });
+  static serverError(res: Response, message?: string): void {
+    this.send({ res, statusCode: 500, message: message || 'Internal Server Error' });
   }
 }

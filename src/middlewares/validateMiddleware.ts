@@ -4,21 +4,38 @@ import { z } from 'zod';
 export const validate = (schema: z.ZodObject) => {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      // Validate body, query, and params simultaneously
+      // 1. Parse and validate the incoming request parts via Zod
       const parsed = await schema.parseAsync({
         body: req.body,
         query: req.query,
         params: req.params,
       });
 
-      // Assign the safely parsed & structured data back to the request object
-      req.body = parsed.body;
-      req.query = parsed.query as Record<string, string | string[] | undefined>;
-      req.params = parsed.params as Record<string, string>;
+      // 2. Use Object.defineProperty to safely override Express 5's read-only getters
+      Object.defineProperty(req, 'body', {
+        value: parsed.body,
+        writable: true,
+        configurable: true,
+        enumerable: true,
+      });
+
+      Object.defineProperty(req, 'query', {
+        value: parsed.query,
+        writable: true,
+        configurable: true,
+        enumerable: true,
+      });
+
+      Object.defineProperty(req, 'params', {
+        value: parsed.params,
+        writable: true,
+        configurable: true,
+        enumerable: true,
+      });
 
       next();
     } catch (error) {
-      next(error);
+      next(error); // Passes ZodError down to your global error handler
     }
   };
 };
