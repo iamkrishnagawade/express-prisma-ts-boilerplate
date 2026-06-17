@@ -22,7 +22,7 @@ export class ApiResponse {
     const resultsCount = Array.isArray(data) ? data.length : undefined;
 
     res.status(statusCode).json({
-      status: 'success',
+      status: `${statusCode}`.startsWith('4') ? 'fail' : 'success',
       message,
       ...(resultsCount !== undefined && { results: resultsCount }),
       ...(data !== undefined && { data }),
