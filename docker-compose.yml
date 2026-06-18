@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  # 1. Database Service
+  postgres-db:
+    image: postgres:16-alpine
+    container_name: express-ts-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mydb
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # 2. Express API Application Service
+  api-server:
+    build:
+      context: .
+      target: builder # Targets the build stage for local hot-reloading development
+    container_name: express-ts-api
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - DATABASE_URL=postgresql://postgres:postgres@postgres-db:5432/mydb?schema=public
+    command: npm run dev
+    volumes:
+      - .:/app
+      - /app/node_modules # Prevents local node_modules from overwriting container node_modules
+    depends_on:
+      - postgres-db
+
+volumes:
+  postgres_data:
